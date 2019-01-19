@@ -1,0 +1,10 @@
+CMakeCache.txt
+CMakeFiles/
+Makefile.rules
+config.log
+config.status
+libtool
+sdl2-config
+sdl2-config.cmake
+sdl2.pc
+include/SDL_config.h
