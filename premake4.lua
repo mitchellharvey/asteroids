@@ -7,6 +7,8 @@ solution "Asteroids"
         "StaticRuntime",
     }
 
+    links { "SDL2" }
+
     configuration { "gmake" }
         buildoptions {"-std=c++14"}
 
@@ -15,8 +17,6 @@ solution "Asteroids"
         language "C++"
         targetname "engine"
         flags(common_flags)
-        links { "SDL2" }
-        libdirs { "./thirdparty/SDL2-2.0.9/build/.libs" }
 
         files {
             "./engine/*.cpp",

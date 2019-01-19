@@ -1,7 +1,7 @@
 Install Dependencies:
 =====
 Linux:
-    apt-get install premake4
+    apt-get install premake4 libsdl2-dev 
 
 Windows:
     TODO
@@ -9,7 +9,7 @@ Windows:
 Build Third Party:
 =====
 Linux:
-    cd ./thirdparty/SDL2-2.0.9/ && ./configure && make
+    TODO
 
 Windows:
     TODO
