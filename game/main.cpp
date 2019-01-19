@@ -1,10 +1,13 @@
 #include <iostream>
+#include <thread>
 using namespace std;
 
 #include <SDL2/SDL.h>
 
-int main(int argc, char** argv) {
+#include "engine/Logger.h"
+using namespace thirstyfish;
 
+void test_sdl() {
     SDL_Window* window = nullptr;
     SDL_Surface* screenSurface =nullptr;
 
@@ -26,7 +29,8 @@ int main(int argc, char** argv) {
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
         cout << "Failed to initialize SDL [" << SDL_GetError() << "]" << endl;
     } else {
-        window = SDL_CreateWindow("Asteroids" , SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 768, SDL_WINDOW_SHOWN);
+        window = SDL_CreateWindow("Asteroids" , SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+                1024, 768, SDL_WINDOW_SHOWN);
         if (!window) {
             cout << "Failed to create SDL Window" << endl;
         } else {
@@ -37,6 +41,12 @@ int main(int argc, char** argv) {
             SDL_Delay(2000);
         }
     }
+}
+
+int main(int argc, char** argv) {
+
+    Logger::LogLevel(Logger::Level::DEBUG);
+    Logger::Debug("Derp");
 
     return 0;
 }
