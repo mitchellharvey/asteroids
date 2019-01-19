@@ -1,5 +1,5 @@
 #!lua
-solution "gl2d"
+solution "Asteroids"
     configurations {"Debug" , "Release"}
 
     local common_flags = {
@@ -7,12 +7,16 @@ solution "gl2d"
         "StaticRuntime",
     }
 
+    configuration { "gmake" }
+        buildoptions {"-std=c++14"}
 
     project "Engine"
         kind "StaticLib"
         language "C++"
         targetname "engine"
         flags(common_flags)
+        links { "SDL2" }
+        libdirs { "./thirdparty/SDL2-2.0.9/build/.libs" }
 
         files {
             "./engine/*.cpp",
@@ -30,8 +34,6 @@ solution "gl2d"
             targetdir "./build/engine/Release"
             objdir "./build/engine/Release/obj"
             flags {"Optimize"}
-
-
 
     project "Game"
         kind "WindowedApp"
