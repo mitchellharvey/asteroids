@@ -7,7 +7,7 @@ solution "Asteroids"
         "StaticRuntime",
     }
 
-    links { "pthread", "SDL2", "SDL2_image" }
+    links { "pthread" }
     includedirs { "./" }
 
     configuration { "gmake" }
@@ -40,8 +40,9 @@ solution "Asteroids"
         kind "WindowedApp"
         language "C++"
         targetname "game"
-        links { "engine" }
         flags(common_flags)
+
+        links { "Engine", "SDL2", "SDL2_image" }
 
         files {
             "./game/*.cpp",
@@ -52,14 +53,12 @@ solution "Asteroids"
             defines { "_DEBUG" }
             targetdir "./build/game/Debug"
             objdir "./build/game/Debug/obj"
-            libdirs {"./build/engine/Debug"}
             flags {"Symbols"}
 
         configuration "Release"
             defines { "NDEBUG" }
             targetdir "./build/game/Release"
             objdir "./build/game/Release/obj"
-            libdirs {"./build/engine/Release"}
             flags {"Optimize"}
 
 

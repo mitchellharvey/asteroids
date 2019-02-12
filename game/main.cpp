@@ -4,49 +4,33 @@ using namespace std;
 
 #include <SDL2/SDL.h>
 
+#include "engine/System.h"
+#include "engine/Window.h"
 #include "engine/Logger.h"
+
 using namespace thirstyfish;
-
-void test_sdl() {
-    SDL_Window* window = nullptr;
-    SDL_Surface* screenSurface =nullptr;
-
-    /*
-    int viddrivers = SDL_GetNumVideoDrivers();
-    cout << "Total Video Drivers: " << viddrivers << endl;
-    for (int i = 0; i < viddrivers; ++i) {
-        const char* drivername = SDL_GetVideoDriver(i);
-
-        if (SDL_VideoInit(drivername) == 0) {
-            SDL_VideoQuit();
-            cout << "Driver " << drivername << " works." << endl;
-        } else {
-            cout << "Driver " << drivername << " doesn't work." << endl;
-        }
-    }
-    */
-
-    if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
-        cout << "Failed to initialize SDL [" << SDL_GetError() << "]" << endl;
-    } else {
-        window = SDL_CreateWindow("Asteroids" , SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-                1024, 768, SDL_WINDOW_SHOWN);
-        if (!window) {
-            cout << "Failed to create SDL Window" << endl;
-        } else {
-            screenSurface = SDL_GetWindowSurface(window);
-
-            SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-            SDL_UpdateWindowSurface(window);
-            SDL_Delay(2000);
-        }
-    }
-}
 
 int main(int argc, char** argv) {
 
-    Logger::LogLevel(Logger::Level::DEBUG);
-    Logger::Debug("Derp");
+    Logger::logLevel(Logger::Level::DEBUG);
+
+    if (!System::init()) {
+        return 1;
+    }
+
+    Window w;
+
+    Logger::info("Starting main loop");
+    bool running = true;
+    while(running) {
+        System::processEvents([&running](const SDL_Event& event) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
+        });
+    }
+
+    Logger::info("Window closed exiting application");
 
     return 0;
 }

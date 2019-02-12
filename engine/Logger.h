@@ -14,14 +14,14 @@ public:
         ERROR
     };
 
-    static void LogLevel(const Level level);
+    static void logLevel(const Level level);
 
-    static void Log(const Level level, const std::string& message);
+    static void log(const Level level, const std::string& message);
 
-    static void Debug(const std::string& message);
-    static void Info(const std::string& message);
-    static void Warning(const std::string& message);
-    static void Error(const std::string& message);
+    static void debug(const std::string& message);
+    static void info(const std::string& message);
+    static void warning(const std::string& message);
+    static void error(const std::string& message);
 
     Logger() = delete;
     ~Logger() = delete;
