@@ -7,8 +7,11 @@
 namespace thirstyfish {
 class Window {
 public:
-    Window();
-    Window(const std::string& title, const glm::ivec2& pos, const glm::ivec2& size);
+    Window(const std::string& title = "Default Window",
+           const glm::ivec2& size = glm::ivec2(1024, 768),
+           const glm::ivec2& pos = glm::ivec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED)
+    );
+
     ~Window();
 
     Window(const Window&) = delete;

@@ -2,11 +2,19 @@
 #include "engine/Logger.h"
 
 namespace thirstyfish {
-Window::Window() :
-    Window("Default Title",
-            glm::ivec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED),
-            glm::ivec2(1024, 768))
-{
+Window::Window(const std::string& title, const glm::ivec2& size,  const glm::ivec2& pos) :
+_sdlWindow(nullptr),
+_sdlRenderer(nullptr) {
+
+    Logger::info("Creating SDL Window");
+    _sdlWindow = SDL_CreateWindow(title.c_str(), pos.x, pos.y, size.x, size.y, SDL_WINDOW_SHOWN);
+    if (!_sdlWindow) {
+        Logger::error("Failed to create SDL Window");
+        Logger::error(SDL_GetError());
+    } else {
+        Logger::info("Creating SDL Window Renderer");
+        _sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
+    }
 }
 
 Window::~Window() {
@@ -20,21 +28,6 @@ Window::~Window() {
         Logger::info("Destroying SDL Window");
         SDL_DestroyWindow(_sdlWindow);
         _sdlWindow = nullptr;
-    }
-}
-
-Window::Window(const std::string& title, const glm::ivec2& pos, const glm::ivec2& size) :
-_sdlWindow(nullptr),
-_sdlRenderer(nullptr) {
-
-    Logger::info("Creating SDL Window");
-    _sdlWindow = SDL_CreateWindow(title.c_str(), pos.x, pos.y, size.x, size.y, SDL_WINDOW_SHOWN);
-    if (!_sdlWindow) {
-        Logger::error("Failed to create SDL Window");
-        Logger::error(SDL_GetError());
-    } else {
-        Logger::info("Creating SDL Window Renderer");
-        _sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
     }
 }
 
