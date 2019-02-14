@@ -4,6 +4,7 @@
 #include "engine/Window.h"
 #include "engine/Logger.h"
 #include "engine/Image.h"
+#include "engine/Sprite.h"
 
 #include <SDL2/SDL.h>
 
@@ -20,9 +21,17 @@ int main(int argc, char** argv) {
 
     Window w("Asteroids!", glm::vec2(1920, 1080));
 
-    Image ship("./assets/images/ship.png");
+    Image shipImg("./assets/images/ship.png");
+    shipImg.load();
+
+    Sprite ship; 
+    ship.material = { shipImg.id(), SDL_Rect {0, 0, shipImg.width(), shipImg.height()} };
+    ship.position = {};
+    ship.size = shipImg.size();
+
 
     Logger::info("Starting main loop");
+    SDL_Renderer* r = w.renderer();
     bool running = true;
     while(running) {
 
@@ -36,6 +45,9 @@ int main(int argc, char** argv) {
         // Run Game Ticks
         
         // Render Scene
+        SDL_RenderClear(r);
+        ship.render(r);
+        SDL_RenderPresent(r);
     }
 
     Logger::info("Window closed exiting application");

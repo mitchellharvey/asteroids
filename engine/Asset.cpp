@@ -4,7 +4,7 @@
 
 namespace {
     using namespace thirstyfish;
-    std::atomic<AssetId> _nextAssetId(0);
+    std::atomic<AssetId> _nextAssetId(__AID_INTERNAL_ASSET_ID_START);
 }
 
 namespace thirstyfish {

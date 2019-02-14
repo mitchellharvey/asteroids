@@ -3,6 +3,7 @@
 #include "engine/Asset.h"
 
 #include <string>
+#include <glm/vec2.hpp>
 #include <SDL2/SDL.h>
 
 namespace thirstyfish {
@@ -13,6 +14,19 @@ public:
 
     Image(const Image&) = delete;
     Image& operator=(const Image&) = delete;
+
+    static const Image * const get(AssetId id);
+
+    bool load();
+    void unload();
+
+    bool loaded() const;
+    std::string filePath() const;
+    int width() const;
+    int height() const;
+    glm::ivec2 size() const;
+
+    SDL_Texture* createTexture(SDL_Renderer* renderer) const;
 
 private:
     std::string _filePath;

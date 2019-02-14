@@ -66,5 +66,9 @@ glm::ivec2 Window::size() const {
     SDL_GetWindowPosition(_sdlWindow, &size.x, &size.y);
     return size;
 }
+
+SDL_Renderer* Window::renderer() {
+    return _sdlRenderer;
+}
 }
 

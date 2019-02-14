@@ -8,8 +8,8 @@ namespace thirstyfish {
 class Window {
 public:
     Window(const std::string& title = "Default Window",
-           const glm::ivec2& size = glm::ivec2(1024, 768),
-           const glm::ivec2& pos = glm::ivec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED)
+           const glm::ivec2& size = {1024, 768},
+           const glm::ivec2& pos = {SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED}
     );
 
     ~Window();
@@ -26,6 +26,8 @@ public:
     std::string title() const;
     glm::ivec2 position() const;
     glm::ivec2 size() const;
+
+    SDL_Renderer* renderer();
 
 private:
     SDL_Window* _sdlWindow;
