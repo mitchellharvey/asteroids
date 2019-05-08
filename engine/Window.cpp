@@ -1,4 +1,5 @@
 #include "engine/Window.h"
+#include "engine/Image.h"
 #include "engine/Logger.h"
 
 namespace thirstyfish {
@@ -18,6 +19,13 @@ _sdlRenderer(nullptr) {
 }
 
 Window::~Window() {
+
+    // Unload any hardware textures
+    for (const auto &kv : _textureMap) {
+        SDL_DestroyTexture(kv.second);
+    }
+    _textureMap.clear();
+
     if (_sdlRenderer) {
         Logger::info("Destroying SDL Window Renderer");
         SDL_DestroyRenderer(_sdlRenderer);
@@ -67,8 +75,41 @@ glm::ivec2 Window::size() const {
     return size;
 }
 
-SDL_Renderer* Window::renderer() {
-    return _sdlRenderer;
+void Window::render(std::vector<Sprite> sprites) {
+
+    if (_sdlRenderer) {
+        SDL_RenderClear(_sdlRenderer);
+        for(Sprite &s : sprites) {
+            SDL_Texture* texture = textureFromSprite(s);
+            SDL_Rect dest {static_cast<int>(s.position.x), static_cast<int>(s.position.y), s.size.x, s.size.y};
+            SDL_RenderCopyEx(_sdlRenderer, texture, &s.material.imageRect, &dest, 0.0, nullptr, SDL_FLIP_NONE);
+        }
+        SDL_RenderPresent(_sdlRenderer);
+    }
 }
+
+SDL_Texture* Window::textureFromSprite(const Sprite& sprite) {
+
+    AssetId imageId = sprite.material.image;
+    
+    // Try to find already loaded hardware texture 
+    auto f = _textureMap.find(imageId);
+    if (f != _textureMap.end()) {
+        return f->second;
+    }
+
+    // Load hardware texture from sprite image
+    SDL_Texture* texture = nullptr;
+    const Image* img = Image::get(imageId);
+    if (img) {
+        texture = img->createTexture(_sdlRenderer);
+        if (texture) {
+            _textureMap.emplace(imageId, texture);
+        }
+    }
+
+    return texture;
+}
+
 }
 

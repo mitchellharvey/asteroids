@@ -48,13 +48,16 @@ Image::~Image() {
 bool Image::load() {
     Logger::info("Creating SDL Surface for image: " + _filePath);
 
-    if ( !(_loadedSurface = IMG_Load(_filePath.c_str())) ) {
+    if ( !loaded() && !(_loadedSurface = IMG_Load(_filePath.c_str())) ) {
         Logger::error("Failed to create SDL Surface for image: " + _filePath);
+        return false;
     }
+
+    return true;
 }
 
 void Image::unload() {
-    if (_loadedSurface) {
+    if (loaded()) {
         Logger::info("Destroying SDL Surface for image: " + _filePath);
         SDL_FreeSurface(_loadedSurface);
         _loadedSurface = nullptr;
@@ -82,7 +85,6 @@ glm::ivec2 Image::size() const {
 }
 
 SDL_Texture* Image::createTexture(SDL_Renderer* renderer) const {
-    // TODO: REEVALUATE THIS PASSES OWNERSHIP OF TEXTURE NOT COOL
     SDL_Texture* texture = nullptr;
     if (loaded()) {
         texture = SDL_CreateTextureFromSurface(renderer, _loadedSurface);

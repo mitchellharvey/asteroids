@@ -1,8 +1,13 @@
 #pragma once
 
+#include "engine/Types.h"
+#include "engine/Sprite.h"
+
 #include <glm/vec2.hpp>
 #include <SDL2/SDL.h>
 #include <string>
+#include <vector>
+#include <unordered_map>
 
 namespace thirstyfish {
 class Window {
@@ -27,10 +32,14 @@ public:
     glm::ivec2 position() const;
     glm::ivec2 size() const;
 
-    SDL_Renderer* renderer();
+    void render(std::vector<Sprite> sprites);
 
 private:
     SDL_Window* _sdlWindow;
     SDL_Renderer* _sdlRenderer;
+
+    SDL_Texture* textureFromSprite(const Sprite& sprite);
+
+    std::unordered_map<AssetId, SDL_Texture*> _textureMap;
 };
 }

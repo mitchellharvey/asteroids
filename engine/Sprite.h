@@ -11,10 +11,8 @@ struct Sprite {
     Sprite() = default;
     Sprite(const Sprite&) = default;
 
-    virtual void render(SDL_Renderer* renderer);
-
     Material material;
-    glm::ivec2 position;
+    glm::vec2 position;
     glm::ivec2 size;
 };
 }
