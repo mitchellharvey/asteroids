@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     Logger::info("Starting main loop");
     bool running = true;
 
-    const float UPDATES_PER_SECOND = 60.0f;
+    const float UPDATES_PER_SECOND = 600.0f;
     const float FRAMES_PER_SECOND = 144.0f;
 
     const float TICKS_PER_UPDATE = 1000.0f / UPDATES_PER_SECOND;
@@ -71,12 +71,14 @@ int main(int argc, char** argv) {
                 }
             });
 
+            const float secondsPassed = TICKS_PER_UPDATE / 1000;
+
             // Process Input
             const Uint8 *kb = SDL_GetKeyboardState(NULL); 
-            ship.position.x += 1.0 * kb[SDL_SCANCODE_D];
-            ship.position.x -= 1.0 * kb[SDL_SCANCODE_A];
-            ship.position.y -= 1.0 * kb[SDL_SCANCODE_W];
-            ship.position.y += 1.0 * kb[SDL_SCANCODE_S];
+            ship.position.x += 100.0 * kb[SDL_SCANCODE_D] * secondsPassed;
+            ship.position.x -= 100.0 * kb[SDL_SCANCODE_A] * secondsPassed;
+            ship.position.y -= 100.0 * kb[SDL_SCANCODE_W] * secondsPassed;
+            ship.position.y += 100.0 * kb[SDL_SCANCODE_S] * secondsPassed;
 
             // Any logical game updates, position updates whatever go here
 
@@ -93,9 +95,7 @@ int main(int argc, char** argv) {
 
         if (ticksSinceRender >= TICKS_PER_RENDER) {
 
-            // Render Scene.  The Frame Rate is inherinetly clamped to the update rate.  If we didn't do this
-            // and put render outside of the tick loop, we get the diablo effect during lag, where the game speeds
-            // up to catch up.
+            // Render Scene.  
             //
             w.render( {ship} );
             FPS++;
