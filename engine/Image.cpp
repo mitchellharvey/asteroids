@@ -36,6 +36,22 @@ _loadedSurface(nullptr) {
     assert(result.second);
 }
 
+Image::Image(const Image& o) : 
+Image(o._filePath)
+{
+    if (o.loaded()) {
+        load();
+    }
+}
+
+Image& Image::operator=(const Image& o) {
+    unload();
+    _filePath = o._filePath;
+    if (o.loaded()) {
+        load();
+    }
+}
+
 Image::~Image() {
     unload();
 

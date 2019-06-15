@@ -11,6 +11,7 @@ struct Material {
 
     AssetId image = NONE;
     SDL_Rect imageRect;
+    ANCHOR anchor = TOP_LEFT;
 };
 }
 

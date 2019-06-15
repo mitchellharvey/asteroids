@@ -12,8 +12,8 @@ public:
     Image(const std::string& filePath);
     virtual ~Image();
 
-    Image(const Image&) = delete;
-    Image& operator=(const Image&) = delete;
+    Image(const Image& o);
+    Image& operator=(const Image& o);
 
     static const Image * const get(AssetId id);
 

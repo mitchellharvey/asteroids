@@ -3,8 +3,8 @@
 #include "engine/System.h"
 #include "engine/Window.h"
 #include "engine/Logger.h"
-#include "engine/Image.h"
-#include "engine/Sprite.h"
+
+#include "Game.h"
 
 #include <SDL2/SDL.h>
 #include <chrono>
@@ -25,13 +25,7 @@ int main(int argc, char** argv) {
     std::string windowTitle = "Asteroids!";
     Window w(windowTitle, glm::vec2(1920, 1080));
 
-    Image shipImg("./assets/images/ship.png");
-    shipImg.load();
-
-    Sprite ship; 
-    ship.material = { shipImg.id(), SDL_Rect {0, 0, shipImg.width(), shipImg.height()} };
-    ship.position = {};
-    ship.size = shipImg.size();
+    Game game;
 
     Logger::info("Starting main loop");
     bool running = true;
@@ -63,7 +57,7 @@ int main(int argc, char** argv) {
         // how often we should process the logic every second
         while(ticksSinceUpdate >= TICKS_PER_UPDATE) {
             // Process events
-            System::processEvents([&running, &ship](const SDL_Event& event) {
+            System::processEvents([&running](const SDL_Event& event) {
                 switch (event.type) {
                     case SDL_QUIT:
                         running = false;
@@ -75,12 +69,9 @@ int main(int argc, char** argv) {
 
             // Process Input
             const Uint8 *kb = SDL_GetKeyboardState(NULL); 
-            ship.position.x += 100.0 * kb[SDL_SCANCODE_D] * secondsPassed;
-            ship.position.x -= 100.0 * kb[SDL_SCANCODE_A] * secondsPassed;
-            ship.position.y -= 100.0 * kb[SDL_SCANCODE_W] * secondsPassed;
-            ship.position.y += 100.0 * kb[SDL_SCANCODE_S] * secondsPassed;
 
             // Any logical game updates, position updates whatever go here
+            running = running && game.run(kb, secondsPassed);
 
             // Each update, reduce the amount of ticks since last update until we've updated
             // as many times as required based on TICKS_PER_UPDATE
@@ -97,7 +88,7 @@ int main(int argc, char** argv) {
 
             // Render Scene.  
             //
-            w.render( {ship} );
+            game.draw(w);
             FPS++;
             
             if ((currentTicks - lastFPSCounterTick) >= 1000) {

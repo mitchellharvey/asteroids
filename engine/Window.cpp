@@ -81,8 +81,19 @@ void Window::render(std::vector<Sprite> sprites) {
         SDL_RenderClear(_sdlRenderer);
         for(Sprite &s : sprites) {
             SDL_Texture* texture = textureFromSprite(s);
-            SDL_Rect dest {static_cast<int>(s.position.x), static_cast<int>(s.position.y), s.size.x, s.size.y};
-            SDL_RenderCopyEx(_sdlRenderer, texture, &s.material.imageRect, &dest, 0.0, nullptr, SDL_FLIP_NONE);
+
+            float anchors[][2] = {
+                {0.0f, 0.0f},
+                {-1.0f, 0.0f},
+                {0.0f, -1.0f},
+                {-1.0f, -1.0f},
+                {-0.5f, -0.5f}
+            };
+
+            float x = s.position.x + (s.size.x * anchors[s.material.anchor][0]);
+            float y = s.position.y + (s.size.y * anchors[s.material.anchor][1]);
+            SDL_Rect dest {static_cast<int>(x), static_cast<int>(y), s.size.x, s.size.y};
+            SDL_RenderCopyEx(_sdlRenderer, texture, &s.material.imageRect, &dest, s.rotation, nullptr, SDL_FLIP_NONE);
         }
         SDL_RenderPresent(_sdlRenderer);
     }

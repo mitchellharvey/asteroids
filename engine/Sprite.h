@@ -14,6 +14,7 @@ struct Sprite {
     Material material;
     glm::vec2 position;
     glm::ivec2 size;
+    float rotation = 0.0f;
 };
 }
 
