@@ -17,7 +17,7 @@ Asset::~Asset() {
 }
 
 void Asset::newAssetId() {
-    _id = std::atomic_fetch_add(&_nextAssetId, 1ul);
+    _id = std::atomic_fetch_add(&_nextAssetId, uint64_t(1));
 }
 
 AssetId Asset::id() const {

@@ -50,6 +50,7 @@ Image& Image::operator=(const Image& o) {
     if (o.loaded()) {
         load();
     }
+    return *this;
 }
 
 Image::~Image() {
