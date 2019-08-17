@@ -19,7 +19,6 @@ public:
     glm::vec2 position() const;
 
 private:
-    Image _img;
     Sprite _sprite;
     glm::vec2 _velocity;
 

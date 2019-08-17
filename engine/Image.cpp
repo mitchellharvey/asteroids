@@ -1,5 +1,6 @@
 #include "engine/Image.h"
 #include "engine/Logger.h"
+#include "engine/String.h"
 
 #include <SDL2/SDL_image.h>
 #include <unordered_map>
@@ -24,21 +25,39 @@ const Image * const Image::get(AssetId id) {
     return nullptr;
 }
 
+Image::Image() :
+Asset(),
+_loadedSurface(nullptr)
+{
+}
+
 Image::Image(const std::string& filePath) :
 Asset(),
 _filePath(filePath),
 _loadedSurface(nullptr) {
 
+    addImageReference();
+}
+
+void Image::addImageReference() {
     std::lock_guard<std::mutex> guard(_mutex);
-
     auto result = _images.emplace(_id, this);
-
     assert(result.second);
+}
+
+void Image::removeImageReference() {
+    {
+        std::lock_guard<std::mutex> guard(_mutex);
+        _images.erase(_id);
+    }
 }
 
 Image::Image(const Image& o) : 
 Image(o._filePath)
 {
+    removeImageReference();
+    newAssetId();
+    addImageReference();
     if (o.loaded()) {
         load();
     }
@@ -46,6 +65,9 @@ Image(o._filePath)
 
 Image& Image::operator=(const Image& o) {
     unload();
+    removeImageReference();
+    newAssetId();
+    addImageReference();
     _filePath = o._filePath;
     if (o.loaded()) {
         load();
@@ -55,11 +77,7 @@ Image& Image::operator=(const Image& o) {
 
 Image::~Image() {
     unload();
-
-    {
-        std::lock_guard<std::mutex> guard(_mutex);
-        _images.erase(_id);
-    }
+    removeImageReference();
 }
 
 bool Image::load() {

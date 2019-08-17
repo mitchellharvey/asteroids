@@ -23,5 +23,10 @@ float random(float min, float max) {
     return d(RANDOM_ENGINE);
 }
 
+int random(int min, int max) {
+    std::uniform_int_distribution<int> d(min, max);
+    return d(RANDOM_ENGINE);
+}
+
 }
 

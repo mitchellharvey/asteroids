@@ -30,6 +30,8 @@ private:
     Window* _window;
     Ship _ship;
     std::vector<Asteroid> _asteroids;
+    int _minAsteroids;
+    int _maxAsteroids;
     SDL_Rect _gameBounds;
     SDL_Rect _visibleBounds;;
 };

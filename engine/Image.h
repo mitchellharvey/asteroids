@@ -9,6 +9,7 @@
 namespace thirstyfish {
 class Image : public Asset {
 public:
+    Image();
     Image(const std::string& filePath);
     virtual ~Image();
 
@@ -31,6 +32,9 @@ public:
 private:
     std::string _filePath;
     SDL_Surface* _loadedSurface;
+private:
+    void addImageReference();
+    void removeImageReference();
 };
 }
 
