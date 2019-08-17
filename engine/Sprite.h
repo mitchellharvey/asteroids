@@ -14,6 +14,8 @@ struct Sprite {
     glm::vec2 localYAxis() const;
     glm::vec2 localXAxis() const;
 
+    SDL_Rect bounds() const;
+
     Material material;
     glm::vec2 position;
     glm::ivec2 size;

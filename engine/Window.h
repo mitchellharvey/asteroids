@@ -25,8 +25,8 @@ public:
     void show();
     void hide();
     void setTitle(const std::string& title);
-    void setPosition(const glm::ivec2& position);
-    void setSize(const glm::ivec2& size);
+    void position(const glm::ivec2& position);
+    void size(const glm::ivec2& size);
 
     std::string title() const;
     glm::ivec2 position() const;

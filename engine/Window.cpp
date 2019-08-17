@@ -16,6 +16,7 @@ _sdlRenderer(nullptr) {
     } else {
         Logger::info("Creating SDL Window Renderer");
         _sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
+        SDL_GL_SetSwapInterval(1);
     }
 }
 
@@ -52,11 +53,11 @@ void Window::setTitle(const std::string& title) {
     SDL_SetWindowTitle(_sdlWindow, title.c_str());
 }
 
-void Window::setPosition(const glm::ivec2& position) {
+void Window::position(const glm::ivec2& position) {
     SDL_SetWindowPosition(_sdlWindow, position.x, position.y);
 }
 
-void Window::setSize(const glm::ivec2& size) {
+void Window::size(const glm::ivec2& size) {
     SDL_SetWindowSize(_sdlWindow, size.x, size.y);
 }
 
@@ -79,21 +80,11 @@ glm::ivec2 Window::size() const {
 void Window::render(const std::vector<Sprite>& sprites) {
 
     if (_sdlRenderer) {
+        SDL_SetRenderDrawColor(_sdlRenderer, 0,0,0,255);
         SDL_RenderClear(_sdlRenderer);
         for(const Sprite &s : sprites) {
             SDL_Texture* texture = textureFromSprite(s);
-
-            float anchors[][2] = {
-                {0.0f, 0.0f},
-                {-1.0f, 0.0f},
-                {0.0f, -1.0f},
-                {-1.0f, -1.0f},
-                {-0.5f, -0.5f}
-            };
-
-            float x = s.position.x + (s.size.x * anchors[s.material.anchor][0]);
-            float y = s.position.y + (s.size.y * anchors[s.material.anchor][1]);
-            SDL_Rect dest {static_cast<int>(x), static_cast<int>(y), s.size.x, s.size.y};
+            SDL_Rect dest = s.bounds();
             SDL_RenderCopyEx(_sdlRenderer, texture, &s.material.imageRect, &dest, s.rotation, nullptr, SDL_FLIP_NONE);
         }
         SDL_RenderPresent(_sdlRenderer);

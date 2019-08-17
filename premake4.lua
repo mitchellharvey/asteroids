@@ -11,7 +11,7 @@ solution "Asteroids"
     includedirs { "./" }
 
     configuration { "gmake" }
-        buildoptions {"-std=c++14"}
+        buildoptions {"-std=c++17"}
 
     project "Engine"
         kind "StaticLib"

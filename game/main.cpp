@@ -14,6 +14,16 @@
 
 using namespace thirstyfish;
 
+void checkSDLError() {
+
+    const char* err = SDL_GetError();
+    if (err[0] != 0) {
+        Logger::error(fmt("SDL ERROR: {}",err));
+        SDL_ClearError();
+    }
+}
+
+
 int main(int argc, char** argv) {
 
     Logger::logLevel(Logger::Level::DEBUG);
@@ -25,13 +35,14 @@ int main(int argc, char** argv) {
 
     std::string windowTitle = "Asteroids!";
     Window w(windowTitle, glm::vec2(1920, 1080));
+    checkSDLError();
 
     Game game(&w);
 
     Logger::info("Starting main loop");
     bool running = true;
 
-    const float UPDATES_PER_SECOND = 600.0f;
+    const float UPDATES_PER_SECOND = 60.0f;
     const float FRAMES_PER_SECOND = 144.0f;
 
     const float TICKS_PER_UPDATE = 1000.0f / UPDATES_PER_SECOND;
@@ -74,12 +85,7 @@ int main(int argc, char** argv) {
             // Any logical game updates, position updates whatever go here
             running = running && game.run(kb, secondsPassed);
 
-            const char* err = SDL_GetError();
-            if (err[0] != 0) {
-                Logger::error(fmt("SDL ERROR: {}",err));
-                SDL_ClearError();
-            }
-
+            checkSDLError();
 
             // Each update, reduce the amount of ticks since last update until we've updated
             // as many times as required based on TICKS_PER_UPDATE
@@ -109,8 +115,6 @@ int main(int argc, char** argv) {
             float fractionalPart = std::modf(ticksSinceRender / TICKS_PER_RENDER, &wholePart);
             ticksSinceRender = ticksSinceRender - ((wholePart * TICKS_PER_RENDER) + (fractionalPart * TICKS_PER_RENDER));
         }
-            
-        
     }
 
     Logger::info("Window closed exiting application");

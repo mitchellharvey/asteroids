@@ -63,12 +63,14 @@ void Ship::update(const Uint8* input, float elapsed) {
         accel -= _accelerationRate * elapsed;
     }
 
+    float speed = glm::length(_velocity) + accel;
     glm::vec2 acceleration = _sprite.localYAxis() * accel;
-    _velocity += acceleration;
+    if (speed < _maxSpeed && speed > -_maxSpeed) {
+        _velocity += acceleration;
+    }
 
     // Apply Drag to the velocity
     if (!accelerate && !deccelerate) {
-        float speed = glm::length(_velocity);
         if (speed > _dragSpeedKickin) {
             _velocity -= glm::normalize(_velocity) * _dragRate * elapsed;
         } else if (speed < -_dragSpeedKickin) {

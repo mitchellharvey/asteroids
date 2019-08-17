@@ -4,7 +4,10 @@
 #include "engine/Sprite.h"
 #include "engine/Image.h"
 
+#include <vector>
+
 #include "Ship.h"
+#include "Asteroid.h"
 
 using thirstyfish::Window;
 using thirstyfish::Image;
@@ -22,7 +25,12 @@ public:
     void draw();
 
 private:
+    void boundsCheckObject(GameObject& obj);
+
     Window* _window;
     Ship _ship;
+    std::vector<Asteroid> _asteroids;
+    SDL_Rect _gameBounds;
+    SDL_Rect _visibleBounds;;
 };
 

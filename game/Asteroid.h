@@ -7,10 +7,10 @@
 using thirstyfish::Sprite;
 using thirstyfish::Image;
 
-class Ship : public GameObject {
+class Asteroid : public GameObject {
 public:
-    Ship();
-    ~Ship();
+    Asteroid();
+    ~Asteroid();
 
     void update(const Uint8* input, float elapsed);
     const Sprite& sprite() const;
@@ -24,11 +24,11 @@ private:
     glm::vec2 _velocity;
 
     float _maxSpeed;
+    float _minSpeed;
+
     float _rotationSpeed;
-
-    float _accelerationRate;
-
-    float _dragRate;
-    float _dragSpeedKickin;
+    float _maxRotationSpeed;
+    float _minRotationSpeed;
 };
+
 
