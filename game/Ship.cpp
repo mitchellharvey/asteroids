@@ -13,6 +13,7 @@ using thirstyfish::ANCHOR;
 
 Ship::Ship() :
 _img("./assets/images/ship.png"),
+_velocity(0.0f, 0.0f),
 _maxSpeed(500.0f),
 _rotationSpeed(100.0f),
 _accelerationRate(200.0f),
@@ -68,7 +69,6 @@ void Ship::update(const Uint8* input, float elapsed) {
     // Apply Drag to the velocity
     if (!accelerate && !deccelerate) {
         float speed = glm::length(_velocity);
-        Logger::info(fmt("Current Speed: {}", speed));
         if (speed > _dragSpeedKickin) {
             _velocity -= glm::normalize(_velocity) * _dragRate * elapsed;
         } else if (speed < -_dragSpeedKickin) {
@@ -79,5 +79,16 @@ void Ship::update(const Uint8* input, float elapsed) {
 
     // Apply velocity to sprite position
     _sprite.position += (_velocity * elapsed);
+
+    //Logger::debug(fmt("Ship Position: {}", _sprite.position));
 }
 
+
+void Ship::position(glm::vec2 pos) {
+    _sprite.position = pos;
+    //Logger::debug(fmt("Set Ship Position: {}", _sprite.position));
+}
+
+glm::vec2 Ship::position() const {
+    return _sprite.position;
+}

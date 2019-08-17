@@ -2,6 +2,7 @@
 
 #include <glm/vec2.hpp>
 #include <string>
+#include "engine/Types.h"
 
 namespace thirstyfish {
     std::string str(int v);
@@ -9,6 +10,9 @@ namespace thirstyfish {
     std::string str(unsigned int v);
     std::string str(void* v);
     std::string str(const glm::vec2& v);
+    std::string str(AssetId id);
+    const std::string& str(const std::string& string);
+    std::string str(const char* cstr);
 
     template<typename T>
     std::string str(T* v) {

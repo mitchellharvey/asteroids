@@ -1,6 +1,7 @@
 #include "engine/Window.h"
 #include "engine/Image.h"
 #include "engine/Logger.h"
+#include "engine/String.h"
 
 namespace thirstyfish {
 Window::Window(const std::string& title, const glm::ivec2& size,  const glm::ivec2& pos) :
@@ -71,7 +72,7 @@ glm::ivec2 Window::position() const {
 
 glm::ivec2 Window::size() const {
     glm::ivec2 size;
-    SDL_GetWindowPosition(_sdlWindow, &size.x, &size.y);
+    SDL_GetWindowSize(_sdlWindow, &size.x, &size.y);
     return size;
 }
 
@@ -116,7 +117,11 @@ SDL_Texture* Window::textureFromSprite(const Sprite& sprite) {
         texture = img->createTexture(_sdlRenderer);
         if (texture) {
             _textureMap.emplace(imageId, texture);
+        } else {
+            Logger::error(fmt("Failed to create hardware texture from image [id: {}] {}", imageId, img->filePath()));
         }
+    } else {
+        Logger::error(fmt("Failed to get Image from image id {}", imageId));
     }
 
     return texture;

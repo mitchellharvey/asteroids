@@ -3,6 +3,7 @@
 #include "engine/System.h"
 #include "engine/Window.h"
 #include "engine/Logger.h"
+#include "engine/String.h"
 
 #include "Game.h"
 
@@ -25,7 +26,7 @@ int main(int argc, char** argv) {
     std::string windowTitle = "Asteroids!";
     Window w(windowTitle, glm::vec2(1920, 1080));
 
-    Game game;
+    Game game(&w);
 
     Logger::info("Starting main loop");
     bool running = true;
@@ -73,6 +74,13 @@ int main(int argc, char** argv) {
             // Any logical game updates, position updates whatever go here
             running = running && game.run(kb, secondsPassed);
 
+            const char* err = SDL_GetError();
+            if (err[0] != 0) {
+                Logger::error(fmt("SDL ERROR: {}",err));
+                SDL_ClearError();
+            }
+
+
             // Each update, reduce the amount of ticks since last update until we've updated
             // as many times as required based on TICKS_PER_UPDATE
             ticksSinceUpdate -= TICKS_PER_UPDATE;
@@ -88,7 +96,7 @@ int main(int argc, char** argv) {
 
             // Render Scene.  
             //
-            game.draw(w);
+            game.draw();
             FPS++;
             
             if ((currentTicks - lastFPSCounterTick) >= 1000) {

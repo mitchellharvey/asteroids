@@ -13,6 +13,18 @@ namespace thirstyfish {
         return std::to_string(v);
     }
 
+    std::string str(AssetId id) {
+        return std::to_string(id);
+    }
+
+    const std::string& str(const std::string& string) {
+        return string;
+    }
+
+    std::string str(const char* cstr) {
+        return std::string(cstr);
+    }
+
     std::string str(void* v) {
         char buff[32] = {0};
         snprintf(buff, sizeof(buff), "%p", v);

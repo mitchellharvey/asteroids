@@ -12,8 +12,14 @@ using thirstyfish::fmt;
 using thirstyfish::Logger;
 using thirstyfish::ANCHOR;
 
-Game::Game()
+Game::Game(Window* window) :
+_window(window) 
 {
+    if (_window) {
+        glm::vec2 center = _window->size() / 2;
+        _ship.position(center);
+        Logger::debug(fmt("Window size {}, center {}", _window->size(), center));
+    }
 }
 
 Game::~Game() {
@@ -27,6 +33,8 @@ bool Game::run(const Uint8* input, float elapsed) {
     return running;
 }
 
-void Game::draw(Window& window) {
-    window.render({_ship.sprite()});
+void Game::draw() {
+    if (_window) {
+        _window->render({_ship.sprite()});
+    }
 }

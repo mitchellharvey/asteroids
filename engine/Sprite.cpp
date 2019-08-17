@@ -8,6 +8,12 @@
 
 namespace thirstyfish {
 
+Sprite::Sprite() :
+position(0.0f, 0.0f),
+size(0.0f, 0.0f)
+{
+}
+
 glm::vec2 Sprite::localYAxis() const {
     glm::vec2 worldUp(0.0f, -1.0f);
     return glm::normalize(glm::rotate(worldUp, glm::radians(rotation)));

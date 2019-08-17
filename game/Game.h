@@ -12,16 +12,17 @@ using thirstyfish::Sprite;
 
 class Game {
 public:
-    Game();
+    Game(Window* window);
     ~Game();
 
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 
     bool run(const Uint8* input, const float elapsed);
-    void draw(Window& window);
+    void draw();
 
 private:
+    Window* _window;
     Ship _ship;
 };
 

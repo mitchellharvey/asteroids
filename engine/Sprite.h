@@ -8,7 +8,7 @@
 namespace thirstyfish {
 struct Sprite {
 
-    Sprite() = default;
+    Sprite();
     Sprite(const Sprite&) = default;
 
     glm::vec2 localYAxis() const;

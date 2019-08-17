@@ -14,6 +14,9 @@ public:
     void update(const Uint8* input, float elapsed);
     const Sprite& sprite() const;
 
+    void position(glm::vec2 pos);
+    glm::vec2 position() const;
+
 private:
     Image _img;
     Sprite _sprite;
