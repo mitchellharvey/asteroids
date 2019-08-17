@@ -75,11 +75,11 @@ glm::ivec2 Window::size() const {
     return size;
 }
 
-void Window::render(std::vector<Sprite> sprites) {
+void Window::render(const std::vector<Sprite>& sprites) {
 
     if (_sdlRenderer) {
         SDL_RenderClear(_sdlRenderer);
-        for(Sprite &s : sprites) {
+        for(const Sprite &s : sprites) {
             SDL_Texture* texture = textureFromSprite(s);
 
             float anchors[][2] = {

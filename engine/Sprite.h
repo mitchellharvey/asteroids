@@ -11,9 +11,13 @@ struct Sprite {
     Sprite() = default;
     Sprite(const Sprite&) = default;
 
+    glm::vec2 localYAxis() const;
+    glm::vec2 localXAxis() const;
+
     Material material;
     glm::vec2 position;
     glm::ivec2 size;
+
     float rotation = 0.0f;
 };
 }

@@ -32,7 +32,7 @@ public:
     glm::ivec2 position() const;
     glm::ivec2 size() const;
 
-    void render(std::vector<Sprite> sprites);
+    void render(const std::vector<Sprite>& sprites);
 
 private:
     SDL_Window* _sdlWindow;

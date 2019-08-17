@@ -4,6 +4,8 @@
 #include "engine/Sprite.h"
 #include "engine/Image.h"
 
+#include "Ship.h"
+
 using thirstyfish::Window;
 using thirstyfish::Image;
 using thirstyfish::Sprite;
@@ -20,7 +22,6 @@ public:
     void draw(Window& window);
 
 private:
-    Image _shipImg;
-    Sprite _shipSprite;
+    Ship _ship;
 };
 
