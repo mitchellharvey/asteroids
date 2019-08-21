@@ -29,35 +29,21 @@ Image::Image() :
 Asset(),
 _loadedSurface(nullptr)
 {
+    addImageReference();
 }
 
 Image::Image(const std::string& filePath) :
-Asset(),
-_filePath(filePath),
-_loadedSurface(nullptr) {
-
-    addImageReference();
-}
-
-void Image::addImageReference() {
-    std::lock_guard<std::mutex> guard(_mutex);
-    auto result = _images.emplace(_id, this);
-    assert(result.second);
-}
-
-void Image::removeImageReference() {
-    {
-        std::lock_guard<std::mutex> guard(_mutex);
-        _images.erase(_id);
-    }
-}
-
-Image::Image(const Image& o) : 
-Image(o._filePath)
+Image()
 {
-    removeImageReference();
-    newAssetId();
-    addImageReference();
+    _filePath = filePath;
+}
+
+Image::Image(const Image& o)
+{
+    unload();
+
+    _filePath = o._filePath;
+
     if (o.loaded()) {
         load();
     }
@@ -65,9 +51,6 @@ Image(o._filePath)
 
 Image& Image::operator=(const Image& o) {
     unload();
-    removeImageReference();
-    newAssetId();
-    addImageReference();
     _filePath = o._filePath;
     if (o.loaded()) {
         load();
@@ -133,5 +116,18 @@ SDL_Texture* Image::createTexture(SDL_Renderer* renderer) const {
     return texture;
 }
 
+}
+
+void Image::addImageReference() {
+    std::lock_guard<std::mutex> guard(_mutex);
+    auto result = _images.emplace(_id, this);
+    assert(result.second);
+}
+
+void Image::removeImageReference() {
+    {
+        std::lock_guard<std::mutex> guard(_mutex);
+        _images.erase(_id);
+    }
 }
 

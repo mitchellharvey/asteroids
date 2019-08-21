@@ -4,6 +4,7 @@
 #include "engine/String.h"
 #include "engine/Utils.h"
 
+#include <memory>
 #include <cmath>
 #include <SDL2/SDL.h>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -14,11 +15,7 @@ using thirstyfish::Logger;
 using thirstyfish::ANCHOR;
 using thirstyfish::random;
 
-namespace {
-    Image ASTEROID_IMAGE;
-}
-
-Asteroid::Asteroid() :
+Asteroid::Asteroid(AssetId imageId) :
 _velocity(0.0f, -1.0f),
 _maxSpeed(100.0f),
 _minSpeed(10.0f),
@@ -26,16 +23,7 @@ _rotationSpeed(0.0f),
 _maxRotationSpeed(180.0f),
 _minRotationSpeed(0.1f)
 {
-    if (!ASTEROID_IMAGE.loaded()) {
-        ASTEROID_IMAGE = Image("./assets/images/asteroid.png");
-        ASTEROID_IMAGE.load();
-    }
-
-    _sprite.material = { ASTEROID_IMAGE.id(), SDL_Rect {0, 0, ASTEROID_IMAGE.width(), ASTEROID_IMAGE.height()}, ANCHOR::CENTER };
-    _sprite.position = {};
-
-    float shrink = 0.2f;
-    _sprite.size = { ASTEROID_IMAGE.size().x * shrink, ASTEROID_IMAGE.size().y * shrink };
+    setImage(imageId);
 
     // Generate a random movement direction
     float randomAngle = random(0.0f, 359.99f);
@@ -51,6 +39,16 @@ _minRotationSpeed(0.1f)
 Asteroid::~Asteroid() {
 }
 
+void Asteroid::setImage(AssetId imageId) {
+    const Image* image = Image::get(imageId);
+    if (image) {
+        _sprite.material = { imageId, SDL_Rect {0, 0, image->width(), image->height()}, ANCHOR::CENTER };
+
+        float shrink = 0.2f;
+        _sprite.size = { image->size().x * shrink, image->size().y * shrink };
+    }
+}
+
 const Sprite& Asteroid::sprite() const {
     return _sprite;
 }
@@ -61,7 +59,7 @@ void Asteroid::update(const Uint8* input, float elapsed) {
     _sprite.position += (_velocity * elapsed);
 }
 
-void Asteroid::position(glm::vec2 pos) {
+void Asteroid::setPosition(glm::vec2 pos) {
     _sprite.position = pos;
 }
 

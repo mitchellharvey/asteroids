@@ -53,11 +53,11 @@ void Window::setTitle(const std::string& title) {
     SDL_SetWindowTitle(_sdlWindow, title.c_str());
 }
 
-void Window::position(const glm::ivec2& position) {
+void Window::setPosition(const glm::ivec2& position) {
     SDL_SetWindowPosition(_sdlWindow, position.x, position.y);
 }
 
-void Window::size(const glm::ivec2& size) {
+void Window::setSize(const glm::ivec2& size) {
     SDL_SetWindowSize(_sdlWindow, size.x, size.y);
 }
 

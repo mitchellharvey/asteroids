@@ -11,8 +11,7 @@ using thirstyfish::fmt;
 using thirstyfish::Logger;
 using thirstyfish::ANCHOR;
 
-Ship::Ship() :
-_img("./assets/images/ship.png"),
+Ship::Ship(AssetId imageId) :
 _velocity(0.0f, 0.0f),
 _maxSpeed(500.0f),
 _rotationSpeed(100.0f),
@@ -20,19 +19,23 @@ _accelerationRate(200.0f),
 _dragRate(50.0f),
 _dragSpeedKickin(10.0f)
 {
-    _img.load();
-
-    _sprite.material = { _img.id(), SDL_Rect {0, 0, _img.width(), _img.height()}, ANCHOR::CENTER };
-    _sprite.position = {};
-
-    float shrink = 0.2f;
-    _sprite.size = { _img.size().x * shrink, _img.size().y * shrink };
+    setImage(imageId);
 }
 
 Ship::~Ship() {
 }
 const Sprite& Ship::sprite() const {
     return _sprite;
+}
+
+void Ship::setImage(AssetId imageId) {
+    const Image* image = Image::get(imageId);
+    if (image) {
+        _sprite.material = { imageId, SDL_Rect {0, 0, image->width(), image->height()}, ANCHOR::CENTER };
+
+        float shrink = 0.2f;
+        _sprite.size = { image->size().x * shrink, image->size().y * shrink };
+    }
 }
 
 void Ship::update(const Uint8* input, float elapsed) { 
@@ -81,14 +84,11 @@ void Ship::update(const Uint8* input, float elapsed) {
 
     // Apply velocity to sprite position
     _sprite.position += (_velocity * elapsed);
-
-    //Logger::debug(fmt("Ship Position: {}", _sprite.position));
 }
 
 
-void Ship::position(glm::vec2 pos) {
+void Ship::setPosition(glm::vec2 pos) {
     _sprite.position = pos;
-    //Logger::debug(fmt("Set Ship Position: {}", _sprite.position));
 }
 
 glm::vec2 Ship::position() const {

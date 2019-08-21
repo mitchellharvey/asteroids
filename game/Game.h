@@ -25,6 +25,9 @@ public:
     void draw();
 
 private:
+    Image _asteroidImage;
+    Image _shipImage;
+
     void boundsCheckObject(GameObject& obj);
 
     Window* _window;

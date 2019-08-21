@@ -32,7 +32,6 @@ public:
 private:
     std::string _filePath;
     SDL_Surface* _loadedSurface;
-private:
     void addImageReference();
     void removeImageReference();
 };

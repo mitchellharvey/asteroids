@@ -6,19 +6,24 @@
 
 using thirstyfish::Sprite;
 using thirstyfish::Image;
+using thirstyfish::AssetId;
+using thirstyfish::ASSET_ID_CONSTANTS::NONE;
 
 class Asteroid : public GameObject {
 public:
-    Asteroid();
+    Asteroid(AssetId imageId = NONE);
     ~Asteroid();
 
     void update(const Uint8* input, float elapsed);
+
+    void setImage(AssetId imageId);
+    void setPosition(glm::vec2 pos);
+
+    glm::vec2 position() const;
     const Sprite& sprite() const;
 
-    void position(glm::vec2 pos);
-    glm::vec2 position() const;
-
 private:
+
     Sprite _sprite;
     glm::vec2 _velocity;
 
