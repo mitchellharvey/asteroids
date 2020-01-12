@@ -26,9 +26,6 @@ _maxAsteroids(4)
         // Setup game boundaries
         _visibleBounds = {0, 0, static_cast<int>(windowSize.x), static_cast<int>(windowSize.y)};
 
-        int margin = _ship.sprite().size.x * 2.0f;
-        _gameBounds = {-margin, -margin, _visibleBounds.w + margin, _visibleBounds.h + margin};
-
         // Load Images 
         _asteroidImage = Image("./assets/images/asteroid.png"); 
         _asteroidImage.load();
@@ -40,6 +37,9 @@ _maxAsteroids(4)
         glm::vec2 center = _window->size() / 2;
         _ship.setPosition(center);
         _ship.setImage(_shipImage.id());
+
+        int margin = _ship.sprite().size.x * 2.0f;
+        _gameBounds = {-margin, -margin, _visibleBounds.w + margin, _visibleBounds.h + margin};
 
         // Initialize asteroids
         int totalAsteroids = random(_minAsteroids, _maxAsteroids);
@@ -75,29 +75,23 @@ Game::~Game() {
 }
 
 void Game::boundsCheckObject(GameObject& obj) {
-    
+
     // Check for collisions
     SDL_Rect shipBounds = obj.sprite().bounds();
-    glm::vec2 shipPos = obj.position();
+    glm::vec2 new_pos(obj.position());
     if (shipBounds.x >= _gameBounds.w) {
-        glm::vec2 new_pos(shipPos);
         new_pos.x = _visibleBounds.x - shipBounds.w * 0.5f;
-        obj.setPosition(new_pos);
     } else if (shipBounds.x < _gameBounds.x) {
-        glm::vec2 new_pos(shipPos);
         new_pos.x = _visibleBounds.w + shipBounds.w * 0.5f;
-        obj.setPosition(new_pos);
     }
 
     if (shipBounds.y >= _gameBounds.h) {
-        glm::vec2 new_pos(shipPos);
         new_pos.y = _visibleBounds.y - shipBounds.h * 0.5f;
-        obj.setPosition(new_pos);
     } else if (shipBounds.y < _gameBounds.y) {
-        glm::vec2 new_pos(shipPos);
         new_pos.y = _visibleBounds.h + shipBounds.h * 0.5f;
-        obj.setPosition(new_pos);
     }
+
+    obj.setPosition(new_pos);
 }
 
 bool Game::run(const Uint8* input, float elapsed) {
