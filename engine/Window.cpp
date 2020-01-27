@@ -16,7 +16,7 @@ _sdlRenderer(nullptr) {
     } else {
         Logger::info("Creating SDL Window Renderer");
         _sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
-        SDL_GL_SetSwapInterval(1);
+        //SDL_GL_SetSwapInterval(0);
     }
 }
 

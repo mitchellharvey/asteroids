@@ -5,7 +5,8 @@
 #include "engine/Logger.h"
 #include "engine/String.h"
 
-#include "Game.h"
+#include "asteroids/Asteroids.h"
+#include "model/ModelGame.h"
 
 #include <SDL2/SDL.h>
 #include <chrono>
@@ -14,14 +15,16 @@
 
 using namespace thirstyfish;
 
-void checkSDLError() {
+void _checkSDLError(const char* file, int line) {
 
     const char* err = SDL_GetError();
     if (err[0] != 0) {
-        Logger::error(fmt("SDL ERROR: {}",err));
+        Logger::error(fmt("SDL ERROR: {}:{} :  {}", file, line, err));
         SDL_ClearError();
     }
 }
+
+#define checkSDLError() do { _checkSDLError(__FILE__, __LINE__); } while(false)
 
 
 int main(int argc, char** argv) {
@@ -33,11 +36,17 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    std::string windowTitle = "Asteroids!";
-    Window w(windowTitle, glm::vec2(1920, 1080));
-    checkSDLError();
+    Window w("", glm::vec2(1920, 1080));
 
-    Game game(&w);
+    //Asteroids asteroids(&w);
+    ModelGame modelGame(&w);
+
+    // Hard code which 'game' to launch
+    Game* game = &modelGame;
+    std::string windowTitle = "Model Test";
+    w.setTitle(windowTitle);
+
+    checkSDLError();
 
     Logger::info("Starting main loop");
     bool running = true;
@@ -83,7 +92,7 @@ int main(int argc, char** argv) {
             const Uint8 *kb = SDL_GetKeyboardState(NULL); 
 
             // Any logical game updates, position updates whatever go here
-            running = running && game.run(kb, secondsPassed);
+            running = running && game->run(kb, secondsPassed);
 
             checkSDLError();
 
@@ -102,7 +111,7 @@ int main(int argc, char** argv) {
 
             // Render Scene.  
             //
-            game.draw();
+            game->draw();
             FPS++;
             
             if ((currentTicks - lastFPSCounterTick) >= 1000) {

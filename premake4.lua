@@ -44,9 +44,17 @@ solution "Asteroids"
 
         links { "Engine", "SDL2", "SDL2_image" }
 
+        includedirs { "./game" }
+
         files {
             "./game/*.cpp",
             "./game/*.h",
+
+            "./game/asteroids/*.cpp",
+            "./game/asteroids/*.h",
+
+            "./game/model/*.cpp",
+            "./game/model/*.h",
         }
 
         configuration "Debug"

@@ -1,4 +1,5 @@
-#include "Game.h"
+#include "asteroids/Asteroids.h"
+
 #include "engine/Logger.h"
 #include "engine/String.h"
 #include "engine/Utils.h"
@@ -14,7 +15,7 @@ using thirstyfish::Logger;
 using thirstyfish::ANCHOR;
 using thirstyfish::random;
 
-Game::Game(Window* window) :
+Asteroids::Asteroids(Window* window) :
 _window(window),
 _ship(Ship()),
 _minAsteroids(2),
@@ -71,10 +72,10 @@ _maxAsteroids(4)
     }
 }
 
-Game::~Game() {
+Asteroids::~Asteroids() {
 }
 
-void Game::boundsCheckObject(GameObject& obj) {
+void Asteroids::boundsCheckObject(GameObject& obj) {
 
     // Check for collisions
     SDL_Rect shipBounds = obj.sprite().bounds();
@@ -94,7 +95,7 @@ void Game::boundsCheckObject(GameObject& obj) {
     obj.setPosition(new_pos);
 }
 
-bool Game::run(const Uint8* input, float elapsed) {
+bool Asteroids::run(const Uint8* input, float elapsed) {
     bool running = !input[SDL_SCANCODE_Q];
 
     // Update our game objects
@@ -109,7 +110,7 @@ bool Game::run(const Uint8* input, float elapsed) {
     return running;
 }
 
-void Game::draw() {
+void Asteroids::draw() {
 
     if (_window) {
         std::vector<Sprite> renderables;
@@ -121,3 +122,4 @@ void Game::draw() {
         _window->render(renderables);
     }
 }
+
