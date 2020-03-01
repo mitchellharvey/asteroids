@@ -19,7 +19,9 @@ Asteroids::Asteroids(Window* window) :
 _window(window),
 _ship(Ship()),
 _minAsteroids(2),
-_maxAsteroids(4)
+_maxAsteroids(4), 
+_bulletsPerSecond(3), 
+_elapsedSinceLastBullet(0.0)
 {
     if (_window) {
         glm::vec2 windowSize = _window->size();
@@ -33,6 +35,9 @@ _maxAsteroids(4)
 
         _shipImage = Image("./assets/images/ship.png");
         _shipImage.load();
+
+        _bulletImage = Image("./assets/images/bullet.png");
+        _bulletImage.load();
 
         // Initialize Ship
         glm::vec2 center = _window->size() / 2;
@@ -78,6 +83,7 @@ Asteroids::~Asteroids() {
 void Asteroids::boundsCheckObject(GameObject& obj) {
 
     // Check for collisions
+    // Rename, this is general for asteroids and ships and maybe other shitj
     SDL_Rect shipBounds = obj.sprite().bounds();
     glm::vec2 new_pos(obj.position());
     if (shipBounds.x >= _gameBounds.w) {
@@ -95,8 +101,29 @@ void Asteroids::boundsCheckObject(GameObject& obj) {
     obj.setPosition(new_pos);
 }
 
+bool Asteroids::outOfBounds(const GameObject& obj) {
+    SDL_Rect objBounds = obj.sprite().bounds();
+
+    return  objBounds.x >= _gameBounds.w ||
+            objBounds.x <= _gameBounds.x ||
+            objBounds.y <= _gameBounds.y ||
+            objBounds.y >= _gameBounds.h;
+}
+
 bool Asteroids::run(const Uint8* input, float elapsed) {
     bool running = !input[SDL_SCANCODE_Q];
+
+
+    bool spaceDown = input[SDL_SCANCODE_SPACE];
+
+    _elapsedSinceLastBullet += elapsed;
+
+    float timePerBullet = 1.0f / _bulletsPerSecond;
+    bool shootBullet = _elapsedSinceLastBullet >= timePerBullet;
+    if (spaceDown && shootBullet) {
+        fireBullet();
+        _elapsedSinceLastBullet = 0;
+    }
 
     // Update our game objects
     _ship.update(input, elapsed);
@@ -105,6 +132,17 @@ bool Asteroids::run(const Uint8* input, float elapsed) {
     for (Asteroid& a : _asteroids) {
         a.update(input, elapsed);
         boundsCheckObject(a);
+    }
+
+    for(auto it = _bullets.begin(); it != _bullets.end();) {
+        Bullet& b = *it;
+        b.update(input, elapsed);
+
+        if (outOfBounds(b)) {
+            it = _bullets.erase(it);
+        } else {
+            it++;
+        }
     }
 
     return running;
@@ -119,7 +157,21 @@ void Asteroids::draw() {
             renderables.push_back(a.sprite());
         }
 
+        for(Bullet& b : _bullets) {
+            renderables.push_back(b.sprite());
+        }
+
         _window->render(renderables);
     }
 }
 
+void Asteroids::fireBullet() { 
+
+    Bullet b(
+        _ship.position(),
+        _ship.sprite().localYAxis(),
+        _bulletImage.id()
+    );
+
+    _bullets.push_back(b);
+}

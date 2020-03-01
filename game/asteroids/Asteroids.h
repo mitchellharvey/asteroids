@@ -2,6 +2,7 @@
 
 #include "asteroids/Ship.h"
 #include "asteroids/Asteroid.h"
+#include "asteroids/Bullet.h"
 
 #include "Game.h"
 
@@ -29,14 +30,22 @@ public:
 private:
     Image _asteroidImage;
     Image _shipImage;
+    Image _bulletImage;
 
     void boundsCheckObject(GameObject& obj);
+    void fireBullet();
+    bool outOfBounds(const GameObject& obj);
 
     Window* _window;
     Ship _ship;
     std::vector<Asteroid> _asteroids;
+
+    std::vector<Bullet> _bullets;
+
     int _minAsteroids;
     int _maxAsteroids;
+    float _bulletsPerSecond;
+    float _elapsedSinceLastBullet;
     SDL_Rect _gameBounds;
     SDL_Rect _visibleBounds;;
 };

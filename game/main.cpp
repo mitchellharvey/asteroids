@@ -38,12 +38,12 @@ int main(int argc, char** argv) {
 
     Window w("", glm::vec2(1920, 1080));
 
-    //Asteroids asteroids(&w);
-    ModelGame modelGame(&w);
+    Asteroids asteroids(&w);
+    //ModelGame modelGame(&w);
 
     // Hard code which 'game' to launch
-    Game* game = &modelGame;
-    std::string windowTitle = "Model Test";
+    Game* game = &asteroids;
+    std::string windowTitle = "Asteroids";
     w.setTitle(windowTitle);
 
     checkSDLError();
